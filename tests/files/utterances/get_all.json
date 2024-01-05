@@ -1,0 +1,27 @@
+[
+    {
+        "text": "I want to fly SFO",
+        "intent": {
+            "id": "928398303890",
+            "name": "flight_request"
+        },
+        "entities": [
+            {
+                "id": "120890890090903",
+                "name": "wit$location",
+                "role": "destination",
+                "start": 17,
+                "end": 20,
+                "body": "SFO",
+                "entities": []
+            }
+        ],
+        "traits": [
+            {
+                "id": "198982399822",
+                "name": "wit$sentiment",
+                "value": "neutral"
+            }
+        ]
+    }
+]

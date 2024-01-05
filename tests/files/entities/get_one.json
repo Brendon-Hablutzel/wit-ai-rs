@@ -1,0 +1,52 @@
+{
+    "id": "571979db-f6ac-4820-bc28-a1e0787b98fc",
+    "name": "first_name",
+    "lookups": [
+        "keywords",
+        "free-text"
+    ],
+    "roles": [
+        {
+            "id": "93789208453223",
+            "name": "first_name"
+        }
+    ],
+    "keywords": [
+        {
+            "keyword": "Willy",
+            "synonyms": [
+                "Willy"
+            ]
+        },
+        {
+            "keyword": "Laurent",
+            "synonyms": [
+                "Laurent"
+            ]
+        },
+        {
+            "keyword": "Julien",
+            "synonyms": [
+                "Julien"
+            ]
+        },
+        {
+            "keyword": "Alex",
+            "synonyms": [
+                "Alex"
+            ]
+        },
+        {
+            "keyword": "Aleka",
+            "synonyms": [
+                "Aleka"
+            ]
+        },
+        {
+            "keyword": "Jason",
+            "synonyms": [
+                "Jason"
+            ]
+        }
+    ]
+}

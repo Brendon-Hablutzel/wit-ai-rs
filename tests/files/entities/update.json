@@ -1,0 +1,32 @@
+{
+    "id": "5418abc7-cc68-4073-ae9e-3a5c3c81d965",
+    "name": "Favorite_City",
+    "roles": [
+        {
+            "id": "3920398382332",
+            "name": "Favorite_City"
+        }
+    ],
+    "lookups": [
+        "free-text",
+        "keywords"
+    ],
+    "keywords": [
+        {
+            "keyword": "Paris",
+            "synonyms": [
+                "Paris",
+                "City of Light",
+                "Capital of France"
+            ]
+        },
+        {
+            "keyword": "Seoul",
+            "synonyms": [
+                "Seoul",
+                "서울",
+                "Kimchi paradise"
+            ]
+        }
+    ]
+}

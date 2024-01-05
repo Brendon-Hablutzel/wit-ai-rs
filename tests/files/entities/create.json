@@ -1,0 +1,15 @@
+{
+    "id": "5418abc7-cc68-4073-ae9e-3a5c3c81d965",
+    "name": "favorite_city",
+    "roles": [
+        {
+            "id": "3920398382332",
+            "name": "favorite_city"
+        }
+    ],
+    "lookups": [
+        "free-text",
+        "keywords"
+    ],
+    "keywords": []
+}

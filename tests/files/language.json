@@ -1,0 +1,12 @@
+{
+    "detected_locales": [
+        {
+            "locale": "fr_XX",
+            "confidence": 0.9986
+        },
+        {
+            "locale": "ar_AR",
+            "confidence": 0.0014
+        }
+    ]
+}

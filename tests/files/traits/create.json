@@ -1,0 +1,14 @@
+{
+    "id": "13989798788",
+    "name": "politeness",
+    "values": [
+        {
+            "id": "97873388",
+            "value": "polite"
+        },
+        {
+            "id": "54493392772",
+            "value": "rude"
+        }
+    ]
+}
