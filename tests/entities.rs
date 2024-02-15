@@ -1,6 +1,6 @@
 use mockito::Matcher;
 use wit_ai_rs::{
-    client::WitClientBuilder,
+    client::WitClient,
     entities::{EntityResponse, EntityRole, Keyword, NewEntityBuilder, UpdatedEntityBuilder},
     DeleteResponse, EntityBasic,
 };
@@ -10,7 +10,7 @@ use wit_ai_rs::{
 async fn get_all_entities() {
     let token = std::env::var("WIT_TOKEN").unwrap();
 
-    let client = WitClientBuilder::new(String::from(token), String::from("20231231")).build();
+    let client = WitClient::new(String::from(token), String::from("20231231"));
 
     let _response = client.get_entities().await.unwrap();
 }
@@ -20,7 +20,7 @@ async fn get_all_entities() {
 async fn create_entity() {
     let token = std::env::var("WIT_TOKEN").unwrap();
 
-    let client = WitClientBuilder::new(String::from(token), String::from("20231231")).build();
+    let client = WitClient::new(String::from(token), String::from("20231231"));
 
     let new_entity = NewEntityBuilder::new(String::from("wit$contact")).build();
 
@@ -32,7 +32,7 @@ async fn create_entity() {
 async fn get_one_entity() {
     let token = std::env::var("WIT_TOKEN").unwrap();
 
-    let client = WitClientBuilder::new(String::from(token), String::from("20231231")).build();
+    let client = WitClient::new(String::from(token), String::from("20231231"));
 
     let _response = client
         .get_entity(String::from("wit$quantity"))
@@ -45,7 +45,7 @@ async fn get_one_entity() {
 async fn update_entity() {
     let token = std::env::var("WIT_TOKEN").unwrap();
 
-    let client = WitClientBuilder::new(String::from(token), String::from("20231231")).build();
+    let client = WitClient::new(String::from(token), String::from("20231231"));
 
     let updated_entity = UpdatedEntityBuilder::new(
         String::from("Another_Entity_2"),
@@ -64,7 +64,7 @@ async fn update_entity() {
 async fn delete_entity() {
     let token = std::env::var("WIT_TOKEN").unwrap();
 
-    let client = WitClientBuilder::new(String::from(token), String::from("20231231")).build();
+    let client = WitClient::new(String::from(token), String::from("20231231"));
 
     let _response = client.delete_entity("wit$quantity").await.unwrap();
 }
@@ -75,9 +75,8 @@ async fn get_all_entities_mock() {
 
     let url = server.url();
 
-    let client = WitClientBuilder::new(String::from("TEST_TOKEN"), String::from("20231231"))
-        .api_host(url)
-        .build();
+    let client =
+        WitClient::new(String::from("TEST_TOKEN"), String::from("20231231")).set_api_host(url);
 
     let mock_entities = server
         .mock("GET", "/entities")
@@ -127,9 +126,8 @@ async fn create_entity_mock() {
 
     let url = server.url();
 
-    let client = WitClientBuilder::new(String::from("TEST_TOKEN"), String::from("20231231"))
-        .api_host(url)
-        .build();
+    let client =
+        WitClient::new(String::from("TEST_TOKEN"), String::from("20231231")).set_api_host(url);
 
     let mock_entities = server
         .mock("POST", "/entities")
@@ -171,9 +169,8 @@ async fn get_one_entity_mock() {
 
     let url = server.url();
 
-    let client = WitClientBuilder::new(String::from("TEST_TOKEN"), String::from("20231231"))
-        .api_host(url)
-        .build();
+    let client =
+        WitClient::new(String::from("TEST_TOKEN"), String::from("20231231")).set_api_host(url);
 
     let mock_entities = server
         .mock("GET", "/entities/first_name")
@@ -236,9 +233,8 @@ async fn update_entity_mock() {
 
     let url = server.url();
 
-    let client = WitClientBuilder::new(String::from("TEST_TOKEN"), String::from("20231231"))
-        .api_host(url)
-        .build();
+    let client =
+        WitClient::new(String::from("TEST_TOKEN"), String::from("20231231")).set_api_host(url);
 
     let mock_entities = server
         .mock("PUT", "/entities/favorite_city")
@@ -322,9 +318,8 @@ async fn delete_entity_mock() {
 
     let url = server.url();
 
-    let client = WitClientBuilder::new(String::from("TEST_TOKEN"), String::from("20231231"))
-        .api_host(url)
-        .build();
+    let client =
+        WitClient::new(String::from("TEST_TOKEN"), String::from("20231231")).set_api_host(url);
 
     let mock_entities = server
         .mock("DELETE", "/entities/favorite_city")

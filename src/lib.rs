@@ -6,6 +6,7 @@
 
 pub mod client;
 pub mod common_types;
+pub mod dictation;
 pub mod entities;
 pub mod errors;
 pub mod intents;

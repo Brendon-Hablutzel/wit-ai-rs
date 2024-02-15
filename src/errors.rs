@@ -1,8 +1,8 @@
-//! Crate errors
+//! wit_ai_rs crate-related errors
 
 use serde::Deserialize;
 
-/// Errors that may occur while using this crate
+/// Errors that may occur while using the wit_ai_rs crate
 #[derive(Debug)]
 pub enum Error {
     /// An error while sending the HTTP request to Wit

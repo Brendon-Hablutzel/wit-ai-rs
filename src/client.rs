@@ -9,54 +9,39 @@ const DEFAULT_API_HOST: &str = "https://api.wit.ai";
 /// The main struct for interacting with the Wit API
 #[derive(Debug, Clone)]
 pub struct WitClient {
-    api_host: String,
+    pub(crate) api_host: String,
     version: String,
-    auth_token: String,
+    pub(crate) auth_token: String,
     // reqwest stores the client in an `Arc` internally, so it can be safely cloned
-    reqwest_client: reqwest::Client,
-}
-
-/// Builder for `WitClient`
-#[derive(Debug)]
-pub struct WitClientBuilder {
-    api_host: String,
-    version: String,
-    auth_token: String,
-}
-
-impl WitClientBuilder {
-    /// Initializes a `WitClientBuilder` with the given token and version defaults for API.
-    /// Version is a string in the form of yyyymmdd (ex. 20231231)
-    pub fn new(auth_token: String, version: String) -> Self {
-        let api_host = String::from(DEFAULT_API_HOST);
-
-        Self {
-            auth_token,
-            api_host,
-            version,
-        }
-    }
-
-    /// Set the API host
-    pub fn api_host(mut self, host: String) -> Self {
-        self.api_host = host;
-        self
-    }
-
-    /// Turn the WitClientBuilder into a WitClient
-    pub fn build(self) -> WitClient {
-        let reqwest_client = reqwest::Client::new();
-
-        WitClient {
-            reqwest_client,
-            api_host: self.api_host,
-            version: self.version,
-            auth_token: self.auth_token,
-        }
-    }
+    pub(crate) reqwest_client: reqwest::Client,
 }
 
 impl WitClient {
+    /// Create a new WitClient with the given `auth_token` and `version` and the default
+    /// API host. `version` is a date string of the form yyyymmdd (ex. 20231231)
+    pub fn new(auth_token: String, version: String) -> Self {
+        let api_host = String::from(DEFAULT_API_HOST);
+
+        let reqwest_client = reqwest::Client::new();
+
+        Self {
+            api_host,
+            version,
+            auth_token,
+            reqwest_client,
+        }
+    }
+
+    /// Changes the API host--only recommended for use while testing
+    pub fn set_api_host(self, api_host: String) -> Self {
+        Self {
+            api_host,
+            auth_token: self.auth_token,
+            version: self.version,
+            reqwest_client: self.reqwest_client.clone(),
+        }
+    }
+
     pub(crate) async fn make_request<T: DeserializeOwned>(
         &self,
         method: Method,

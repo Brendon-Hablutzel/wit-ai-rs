@@ -1,6 +1,6 @@
 use mockito::Matcher;
 use wit_ai_rs::{
-    client::WitClientBuilder,
+    client::WitClient,
     utterances::{
         CreateUtteranceResponse, DeleteUtteranceResponse, GetUtterancesRequestBuilder,
         NewUtterance, NewUtteranceEntity, UtteranceResponse, UtteranceResponseEntity,
@@ -14,7 +14,7 @@ use wit_ai_rs::{
 async fn get_utterances() {
     let token = std::env::var("WIT_TOKEN").unwrap();
 
-    let client = WitClientBuilder::new(String::from(token), String::from("20231231")).build();
+    let client = WitClient::new(String::from(token), String::from("20231231"));
 
     let request = GetUtterancesRequestBuilder::new(1000)
         .unwrap()
@@ -30,7 +30,7 @@ async fn get_utterances() {
 async fn create_utterances() {
     let token = std::env::var("WIT_TOKEN").unwrap();
 
-    let client = WitClientBuilder::new(String::from(token), String::from("20231231")).build();
+    let client = WitClient::new(String::from(token), String::from("20231231"));
 
     let new_utterances = vec![NewUtterance::new(
         String::from("make the volume 30"),
@@ -53,7 +53,7 @@ async fn create_utterances() {
 async fn delete_utterances() {
     let token = std::env::var("WIT_TOKEN").unwrap();
 
-    let client = WitClientBuilder::new(String::from(token), String::from("20231231")).build();
+    let client = WitClient::new(String::from(token), String::from("20231231"));
 
     let utterances = vec![String::from("make the volume 30")];
 
@@ -66,9 +66,8 @@ async fn get_utterances_mock() {
 
     let url = server.url();
 
-    let client = WitClientBuilder::new(String::from("TEST_TOKEN"), String::from("20231231"))
-        .api_host(url)
-        .build();
+    let client =
+        WitClient::new(String::from("TEST_TOKEN"), String::from("20231231")).set_api_host(url);
 
     let mock_utterances = server
         .mock("GET", "/utterances")
@@ -120,9 +119,8 @@ async fn create_utterances_mock() {
 
     let url = server.url();
 
-    let client = WitClientBuilder::new(String::from("TEST_TOKEN"), String::from("20231231"))
-        .api_host(url)
-        .build();
+    let client =
+        WitClient::new(String::from("TEST_TOKEN"), String::from("20231231")).set_api_host(url);
 
     let mock_utterances = server
         .mock("POST", "/utterances")
@@ -165,9 +163,8 @@ async fn delete_utterances_mock() {
 
     let url = server.url();
 
-    let client = WitClientBuilder::new(String::from("TEST_TOKEN"), String::from("20231231"))
-        .api_host(url)
-        .build();
+    let client =
+        WitClient::new(String::from("TEST_TOKEN"), String::from("20231231")).set_api_host(url);
 
     let mock_utterances = server
         .mock("DELETE", "/utterances")

@@ -1,6 +1,6 @@
 use mockito::Matcher;
 use wit_ai_rs::{
-    client::WitClientBuilder,
+    client::WitClient,
     traits::{NewTrait, TraitResponse, TraitValue},
     DeleteResponse, TraitBasic,
 };
@@ -10,7 +10,7 @@ use wit_ai_rs::{
 async fn get_all_traits() {
     let token = std::env::var("WIT_TOKEN").unwrap();
 
-    let client = WitClientBuilder::new(String::from(token), String::from("20231231")).build();
+    let client = WitClient::new(String::from(token), String::from("20231231"));
 
     let _response = client.get_traits().await.unwrap();
 }
@@ -20,7 +20,7 @@ async fn get_all_traits() {
 async fn create_trait() {
     let token = std::env::var("WIT_TOKEN").unwrap();
 
-    let client = WitClientBuilder::new(String::from(token), String::from("20231231")).build();
+    let client = WitClient::new(String::from(token), String::from("20231231"));
 
     let new_trait = NewTrait::new(
         String::from("new_trait"),
@@ -35,7 +35,7 @@ async fn create_trait() {
 async fn get_trait() {
     let token = std::env::var("WIT_TOKEN").unwrap();
 
-    let client = WitClientBuilder::new(String::from(token), String::from("20231231")).build();
+    let client = WitClient::new(String::from(token), String::from("20231231"));
 
     let trait_name = "new_trait";
 
@@ -47,7 +47,7 @@ async fn get_trait() {
 async fn delete_trait() {
     let token = std::env::var("WIT_TOKEN").unwrap();
 
-    let client = WitClientBuilder::new(String::from(token), String::from("20231231")).build();
+    let client = WitClient::new(String::from(token), String::from("20231231"));
 
     let trait_name = "new_trait";
 
@@ -59,9 +59,8 @@ async fn get_all_traits_mock() {
     let mut server = mockito::Server::new();
     let url = server.url();
 
-    let client = WitClientBuilder::new(String::from("TEST_TOKEN"), String::from("20231231"))
-        .api_host(url)
-        .build();
+    let client =
+        WitClient::new(String::from("TEST_TOKEN"), String::from("20231231")).set_api_host(url);
 
     let mock = server
         .mock("GET", "/traits")
@@ -102,9 +101,8 @@ async fn create_trait_mock() {
     let mut server = mockito::Server::new();
     let url = server.url();
 
-    let client = WitClientBuilder::new(String::from("TEST_TOKEN"), String::from("20231231"))
-        .api_host(url)
-        .build();
+    let client =
+        WitClient::new(String::from("TEST_TOKEN"), String::from("20231231")).set_api_host(url);
 
     let mock = server
         .mock("POST", "/traits")
@@ -150,9 +148,8 @@ async fn get_trait_mock() {
     let mut server = mockito::Server::new();
     let url = server.url();
 
-    let client = WitClientBuilder::new(String::from("TEST_TOKEN"), String::from("20231231"))
-        .api_host(url)
-        .build();
+    let client =
+        WitClient::new(String::from("TEST_TOKEN"), String::from("20231231")).set_api_host(url);
 
     let mock = server
         .mock("GET", "/traits/politeness")
@@ -195,9 +192,8 @@ async fn delete_trait_mock() {
     let mut server = mockito::Server::new();
     let url = server.url();
 
-    let client = WitClientBuilder::new(String::from("TEST_TOKEN"), String::from("20231231"))
-        .api_host(url)
-        .build();
+    let client =
+        WitClient::new(String::from("TEST_TOKEN"), String::from("20231231")).set_api_host(url);
 
     let mock = server
         .mock("DELETE", "/traits/politeness")

@@ -1,6 +1,6 @@
 use mockito::Matcher;
 use wit_ai_rs::{
-    client::WitClientBuilder,
+    client::WitClient,
     language::{LanguageRequest, LanguageResponse, Locale},
 };
 
@@ -9,7 +9,7 @@ use wit_ai_rs::{
 async fn language() {
     let token = std::env::var("WIT_TOKEN").unwrap();
 
-    let client = WitClientBuilder::new(String::from(token), String::from("20231231")).build();
+    let client = WitClient::new(String::from(token), String::from("20231231"));
 
     let query = "a test of the language endpoint";
 
@@ -51,9 +51,8 @@ async fn language_mock() {
         ],
     };
 
-    let client = WitClientBuilder::new(String::from("TEST_TOKEN"), String::from("20231231"))
-        .api_host(url)
-        .build();
+    let client =
+        WitClient::new(String::from("TEST_TOKEN"), String::from("20231231")).set_api_host(url);
 
     let query = "bonjour les amis";
 

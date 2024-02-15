@@ -1,6 +1,6 @@
 use mockito::Matcher;
 use wit_ai_rs::{
-    client::WitClientBuilder, intents::IntentResponse, DeleteResponse, EntityBasic, IntentBasic,
+    client::WitClient, intents::IntentResponse, DeleteResponse, EntityBasic, IntentBasic,
 };
 
 #[tokio::test]
@@ -8,7 +8,7 @@ use wit_ai_rs::{
 async fn get_all_intents() {
     let token = std::env::var("WIT_TOKEN").unwrap();
 
-    let client = WitClientBuilder::new(String::from(token), String::from("20231231")).build();
+    let client = WitClient::new(String::from(token), String::from("20231231"));
 
     let _response = client.get_intents().await.unwrap();
 }
@@ -18,7 +18,7 @@ async fn get_all_intents() {
 async fn create_intent() {
     let token = std::env::var("WIT_TOKEN").unwrap();
 
-    let client = WitClientBuilder::new(String::from(token), String::from("20231231")).build();
+    let client = WitClient::new(String::from(token), String::from("20231231"));
 
     let new_intent_name = "new_intent";
 
@@ -30,7 +30,7 @@ async fn create_intent() {
 async fn get_intent() {
     let token = std::env::var("WIT_TOKEN").unwrap();
 
-    let client = WitClientBuilder::new(String::from(token), String::from("20231231")).build();
+    let client = WitClient::new(String::from(token), String::from("20231231"));
 
     let intent_name = "new_intent";
 
@@ -42,7 +42,7 @@ async fn get_intent() {
 async fn delete_intent() {
     let token = std::env::var("WIT_TOKEN").unwrap();
 
-    let client = WitClientBuilder::new(String::from(token), String::from("20231231")).build();
+    let client = WitClient::new(String::from(token), String::from("20231231"));
 
     let intent_name = "new_intent";
 
@@ -54,9 +54,8 @@ async fn get_all_intents_mock() {
     let mut server = mockito::Server::new();
     let url = server.url();
 
-    let client = WitClientBuilder::new(String::from("TEST_TOKEN"), String::from("20231231"))
-        .api_host(url)
-        .build();
+    let client =
+        WitClient::new(String::from("TEST_TOKEN"), String::from("20231231")).set_api_host(url);
 
     let mock = server
         .mock("GET", "/intents")
@@ -101,9 +100,8 @@ async fn create_intent_mock() {
     let mut server = mockito::Server::new();
     let url = server.url();
 
-    let client = WitClientBuilder::new(String::from("TEST_TOKEN"), String::from("20231231"))
-        .api_host(url)
-        .build();
+    let client =
+        WitClient::new(String::from("TEST_TOKEN"), String::from("20231231")).set_api_host(url);
 
     let mock = server
         .mock("POST", "/intents")
@@ -136,9 +134,8 @@ async fn get_intent_mock() {
     let mut server = mockito::Server::new();
     let url = server.url();
 
-    let client = WitClientBuilder::new(String::from("TEST_TOKEN"), String::from("20231231"))
-        .api_host(url)
-        .build();
+    let client =
+        WitClient::new(String::from("TEST_TOKEN"), String::from("20231231")).set_api_host(url);
 
     let mock = server
         .mock("GET", "/intents/buy_flowers")
@@ -181,9 +178,8 @@ async fn delete_intent_mock() {
     let mut server = mockito::Server::new();
     let url = server.url();
 
-    let client = WitClientBuilder::new(String::from("TEST_TOKEN"), String::from("20231231"))
-        .api_host(url)
-        .build();
+    let client =
+        WitClient::new(String::from("TEST_TOKEN"), String::from("20231231")).set_api_host(url);
 
     let mock = server
         .mock("DELETE", "/intents/buy_flowers")

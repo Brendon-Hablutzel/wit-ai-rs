@@ -2,7 +2,7 @@ use mockito::Matcher;
 use serde_json::Value;
 use std::collections::HashMap;
 use wit_ai_rs::{
-    client::WitClientBuilder,
+    client::WitClient,
     message::{
         ContextBuilder, Coordinates, IntervalEndpoint, MessageEntity, MessageIntent,
         MessageRequestBuilder, MessageResponse,
@@ -14,7 +14,7 @@ use wit_ai_rs::{
 async fn message() {
     let token = std::env::var("WIT_TOKEN").unwrap();
 
-    let client = WitClientBuilder::new(String::from(token), String::from("20231231")).build();
+    let client = WitClient::new(String::from(token), String::from("20231231"));
 
     let query = "a test query for the message endpoint";
 
@@ -55,9 +55,8 @@ async fn message_mock() {
         ))
         .create();
 
-    let client = WitClientBuilder::new(String::from("TEST_TOKEN"), String::from("20231231"))
-        .api_host(url)
-        .build();
+    let client =
+        WitClient::new(String::from("TEST_TOKEN"), String::from("20231231")).set_api_host(url);
 
     let query = "how many people between Tuesday and Friday";
 
