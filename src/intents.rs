@@ -24,7 +24,7 @@ impl WitClient {
     /// Get basic information about all intents associated with an app
     ///
     /// Example:
-    /// ```rust
+    /// ```rust,ignore
     /// let response = wit_client.get_intents().await.unwrap();
     /// ```
     pub async fn get_intents(&self) -> Result<Vec<IntentBasic>, Error> {
@@ -35,7 +35,7 @@ impl WitClient {
     /// Create a new intent
     ///
     /// Example:
-    /// ```rust
+    /// ```rust,ignore
     /// let response = wit_client.create_intent("intent_name").await.unwrap();
     /// ```
     pub async fn create_intent(&self, intent_name: &str) -> Result<IntentBasic, Error> {
@@ -48,7 +48,7 @@ impl WitClient {
     /// Get more detailed information about a specific intent
     ///
     /// Example:
-    /// ```rust
+    /// ```rust,ignore
     /// let response = wit_client.get_intent("intent_name").await.unwrap();
     /// ```
     pub async fn get_intent(&self, intent_name: &str) -> Result<IntentResponse, Error> {
@@ -61,7 +61,7 @@ impl WitClient {
     /// Delete an intent by name
     ///
     /// Example:
-    /// ```rust
+    /// ```rust,ignore
     /// let response = wit_client.delete_intent("intent_name").await.unwrap();
     /// ```
     pub async fn delete_intent(&self, intent_name: &str) -> Result<DeleteResponse, Error> {

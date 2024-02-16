@@ -69,7 +69,7 @@ impl WitClient {
     /// variant is a single object, a DictationResponse, representing a partial transcription
     ///
     /// Example:
-    /// ```rust
+    /// ```rust,ignore
     /// // Load an audio file
     /// let file = tokio::fs::File::open("test.mp3").await.unwrap();
     ///

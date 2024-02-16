@@ -73,6 +73,13 @@ impl ContextBuilder {
     }
 }
 
+impl Default for ContextBuilder {
+    /// Default constructor for ContextBuilder that initializes all fields to None
+    fn default() -> Self {
+        Self::new()
+    }
+}
+
 /// Coordinates for `Context`
 #[derive(Debug, Serialize)]
 pub struct Coordinates {
@@ -126,7 +133,7 @@ impl MessageRequestBuilder {
     /// Set the maximum number of n-best intents and traits you want to get back.
     /// The default is 1, and the maximum is 8.
     pub fn limit(mut self, limit: u16) -> Result<Self, Error> {
-        if limit < 1 || limit > 8 {
+        if !(1..=8).contains(&limit) {
             return Err(Error::InvalidArgument(format!(
                 "limit should be between 1 and 8 inclusive, got {limit}"
             )));
@@ -250,7 +257,7 @@ impl WitClient {
     /// in the documentation for that struct.
     ///
     /// Example:
-    /// ```rust
+    /// ```rust,ignore
     /// let request = MessageRequestBuilder::new("Some query sentence".to_string())
     ///     .limit(2)
     ///     .unwrap()
@@ -272,7 +279,7 @@ impl WitClient {
     /// defaults for the other arguments.
     ///
     /// Example:
-    /// ```rust
+    /// ```rust,ignore
     /// let response: MessageResponse = wit_client.message_simple("Some query sentence".to_string())
     ///     .await
     ///     .unwrap();

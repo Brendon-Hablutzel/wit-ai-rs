@@ -23,7 +23,7 @@ impl GetUtterancesRequestBuilder {
     /// Creates a new builder for `GetUtterancesRequest`, with the given limit value, which is the
     /// maximum number of utterances to return, between 1 and 10000 inclusive
     pub fn new(limit: u32) -> Result<Self, Error> {
-        if limit < 1 || limit > 10000 {
+        if !(1..=10000).contains(&limit) {
             return Err(Error::InvalidArgument(format!(
                 "limit for getting utterances must be between 1 and 10000 inclusive, got {}",
                 limit
@@ -214,7 +214,7 @@ impl WitClient {
     /// Return information about all utterances associated with the given app
     ///
     /// Example:
-    /// ```rust
+    /// ```rust,ignore
     /// let request = GetUtterancesRequestBuilder::new(5)
     ///     .unwrap()
     ///     .offset(10)
@@ -242,7 +242,7 @@ impl WitClient {
     /// Create new utterances for the given app
     ///
     /// Example:
-    /// ```rust
+    /// ```rust,ignore
     /// let utterance_entity = NewUtteranceEntity::new(
     ///     "entity:entity".to_string(),
     ///     3,
@@ -280,7 +280,7 @@ impl WitClient {
     /// * `utterance_texts` - a vector of strings, where each string is the text of an utterance to delete
     ///
     /// Example:
-    /// ```rust
+    /// ```rust,ignore
     /// let utterances = vec!["an utterance".to_string()];
     ///
     /// let response = wit_client.delete_utterances(utterances).await.unwrap();

@@ -2,3 +2,4 @@
 /Cargo.lock
 *.mp3
 *.wav
+.vscode/

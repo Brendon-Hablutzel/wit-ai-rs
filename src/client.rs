@@ -22,6 +22,7 @@ impl WitClient {
     ///
     /// Example:
     /// ```rust
+    /// # use wit_ai_rs::client::WitClient;
     /// let wit_client = WitClient::new("TOKEN".to_string(), "20240215".to_string());
     /// ```
     pub fn new(auth_token: String, version: String) -> Self {
@@ -41,8 +42,9 @@ impl WitClient {
     ///
     /// Example:
     /// ```rust
+    /// # use wit_ai_rs::client::WitClient;
     /// let wit_client = WitClient::new("TOKEN".to_string(), "20240215".to_string())
-    ///     .set_api_host("https://host.com");
+    ///     .set_api_host("https://host.com".to_string());
     /// ```
     pub fn set_api_host(self, api_host: String) -> Self {
         Self {

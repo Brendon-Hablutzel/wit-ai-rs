@@ -106,7 +106,7 @@ impl WitClient {
     /// Returns basic information about all entities
     ///
     /// Example:
-    /// ```rust
+    /// ```rust,ignore
     /// let response: Vec<EntityBasic> = wit_client.get_entities().await.unwrap();
     /// ```
     pub async fn get_entities(&self) -> Result<Vec<EntityBasic>, Error> {
@@ -117,7 +117,7 @@ impl WitClient {
     /// Creates a new entity
     ///
     /// Example:
-    /// ```rust
+    /// ```rust,ignore
     /// let new_entity = NewEntityBuilder::new("entity_name".to_string())
     ///     .roles(vec!["role".to_string()])
     ///     .build();
@@ -132,7 +132,7 @@ impl WitClient {
     /// Returns information about the entity with the given name
     ///
     /// Example:
-    /// ```rust
+    /// ```rust,ignore
     /// let response: EntityResponse = wit_client.get_entity("entity".to_string()).await.unwrap();
     /// ```
     pub async fn get_entity(&self, entity_name: String) -> Result<EntityResponse, Error> {
@@ -146,7 +146,7 @@ impl WitClient {
     /// data with `updated_entity`
     ///
     /// Example:
-    /// ```rust
+    /// ```rust,ignore
     /// let updated_entity = NewEntityBuilder::new("updated_name".to_string())
     ///     .roles(vec!["updated_role".to_string()])
     ///     .build();
@@ -167,7 +167,7 @@ impl WitClient {
     /// Deletes the entity with the given name
     ///
     /// Example:
-    /// ```rust
+    /// ```rust,ignore
     /// let response: DeleteResponse = wit_client.delete_entity("entity_name").await.unwrap();
     /// ```
     pub async fn delete_entity(&self, entity_name: &str) -> Result<DeleteResponse, Error> {

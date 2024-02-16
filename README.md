@@ -1,7 +1,10 @@
 # wit_ai_rs
 ## An unofficial Rust crate for interacting with the wit.ai API
+[![crates.io](https://img.shields.io/crates/v/wit_ai_rs.svg)](https://crates.io/crates/wit_ai_rs)
+[![Documentation](https://docs.rs/wit_ai_rs/badge.svg)](https://docs.rs/wit_ai_rs)
+[![MIT licensed](https://img.shields.io/crates/l/wit_ai_rs.svg)](./LICENSE)
 
-This crate acts as a wrapper for the [wit.ai](https://wit.ai/) HTTP API, containing functions and types for interacting with the API programmatically. The core type is the `WitClient` struct, which must be initialized before any endpoint can be called.
+This crate acts as a wrapper for the [wit.ai](https://wit.ai/) HTTP API, containing functions and types for interacting with the API programmatically using Rust. The core type is the `WitClient` struct, which must be initialized before any endpoint can be called.
 
 ## Usage
 

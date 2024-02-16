@@ -25,13 +25,13 @@ impl WitClient {
     /// Make a request to the language endpoint
     ///
     /// Example:
-    /// ```rust
+    /// ```rust,ignore
     /// let response: LanguageResponse = wit_client.language("some query sentence".to_string(), 1)
     ///     .await
     ///     .unwrap();
     /// ```
     pub async fn language(&self, query: String, limit: u16) -> Result<LanguageResponse, Error> {
-        if limit > 8 || limit < 1 {
+        if !(1..=8).contains(&limit) {
             return Err(Error::InvalidArgument(format!(
                 "limit must be between 1 and 8 inclusive, got {limit}",
             )));

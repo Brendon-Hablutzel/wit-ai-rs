@@ -47,7 +47,7 @@ impl WitClient {
     /// Get all the traits from app associated with the current wit client
     ///
     /// Example:
-    /// ```rust
+    /// ```rust,ignore
     /// let response: Vec<TraitBasic> = wit_client.get_traits().await.unwrap();
     /// ```
     pub async fn get_traits(&self) -> Result<Vec<TraitBasic>, Error> {
@@ -61,7 +61,7 @@ impl WitClient {
     /// Create a new trait
     ///
     /// Example:
-    /// ```rust
+    /// ```rust,ignore
     /// let new_trait = NewTrait::new("trait_name".to_string(), vec!["value1".to_string()]);
     ///
     /// let response: TraitResponse = wit_client.create_trait(new_trait).await.unwrap();
@@ -77,7 +77,7 @@ impl WitClient {
     /// Get information about a given trait
     ///
     /// Example:
-    /// ```rust
+    /// ```rust,ignore
     /// let response: TraitResponse = wit_client.get_trait("intent_name").await.unwrap();
     /// ```
     pub async fn get_trait(&self, trait_name: &str) -> Result<TraitResponse, Error> {
@@ -93,7 +93,7 @@ impl WitClient {
     /// Delete a trait by name
     ///
     /// Example:
-    /// ```rust
+    /// ```rust,ignore
     /// let response: DeleteResponse = wit_client.delete_trait("intent_name").await.unwrap();
     /// ```
     pub async fn delete_trait(&self, trait_name: &str) -> Result<DeleteResponse, Error> {

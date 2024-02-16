@@ -1,12 +1,12 @@
 [package]
 name = "wit_ai_rs"
-version = "0.1.0"
+version = "0.1.1"
 edition = "2021"
 authors = ["Brendon Hablutzel"]
 license = "MIT"
 repository = "https://github.com/Brendon-Hablutzel/wit-ai-rs"
 description = "An unofficial Rust crate for interacting with the wit.ai API"
-
+keywords = ["wit", "wit.ai", "nlp"]
 
 # See more keys and their definitions at https://doc.rust-lang.org/cargo/reference/manifest.html
 
