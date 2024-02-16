@@ -1,7 +1,7 @@
 use mockito::Matcher;
 use wit_ai_rs::{
     client::WitClient,
-    language::{LanguageRequest, LanguageResponse, Locale},
+    language::{LanguageResponse, Locale},
 };
 
 #[tokio::test]
@@ -13,9 +13,7 @@ async fn language() {
 
     let query = "a test of the language endpoint";
 
-    let language_request = LanguageRequest::new(String::from(query), 2).unwrap();
-
-    let response = client.language(language_request).await.unwrap();
+    let response = client.language(String::from(query), 2).await.unwrap();
 
     assert!(response.detected_locales.len() <= 2);
 }
@@ -56,9 +54,7 @@ async fn language_mock() {
 
     let query = "bonjour les amis";
 
-    let language_request = LanguageRequest::new(String::from(query), 2).unwrap();
-
-    let response = client.language(language_request).await.unwrap();
+    let response = client.language(String::from(query), 2).await.unwrap();
 
     assert_eq!(response, expected_response);
 

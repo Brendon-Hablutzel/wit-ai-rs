@@ -245,7 +245,19 @@ pub struct MessageTrait {
 }
 
 impl WitClient {
-    /// Send a request to Wit's /message endpoint
+    /// Send a request to wit's /message endpoint, using a request builder `MessageRequestBuilder`.
+    /// Information regarding each argument that can be used in `MessageRequestBuilder` can be found
+    /// in the documentation for that struct.
+    ///
+    /// Example:
+    /// ```rust
+    /// let request = MessageRequestBuilder::new("Some query sentence".to_string())
+    ///     .limit(2)
+    ///     .unwrap()
+    ///     .build();
+    ///
+    /// let response: MessageResponse = wit_client.message(request).await.unwrap();
+    /// ```
     pub async fn message(&self, request: MessageRequest) -> Result<MessageResponse, Error> {
         self.make_request(
             Method::GET,
@@ -254,5 +266,19 @@ impl WitClient {
             Option::<Value>::None,
         )
         .await
+    }
+
+    /// Send a request to wit's /message endpoint, using the given query string and
+    /// defaults for the other arguments.
+    ///
+    /// Example:
+    /// ```rust
+    /// let response: MessageResponse = wit_client.message_simple("Some query sentence".to_string())
+    ///     .await
+    ///     .unwrap();
+    /// ```
+    pub async fn message_simple(&self, query: String) -> Result<MessageResponse, Error> {
+        let request = MessageRequestBuilder::new(query).build();
+        self.message(request).await
     }
 }

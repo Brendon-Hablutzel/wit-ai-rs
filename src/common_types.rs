@@ -1,4 +1,7 @@
 //! Types used throughout the crate
+//!
+//! Types specific to each endpoint are stored in the module relating to that endpoint, but
+//! here are types that are used in or returned from multiple endpoints.
 
 use serde::Deserialize;
 

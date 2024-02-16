@@ -1,4 +1,7 @@
-//! Interacting with Wit entities
+//! Methods and types for interacting with wit entities
+//!
+//! Includes methods for CRUD operations so that entities can be
+//! managed programmatically
 
 use crate::{client::WitClient, errors::Error, DeleteResponse, EntityBasic};
 use reqwest::Method;
@@ -42,8 +45,8 @@ impl NewEntityBuilder {
     pub fn new(name: String) -> Self {
         Self {
             new_entity: NewEntity {
-                name,
-                roles: vec![],
+                name: name.clone(),
+                roles: vec![name],
                 lookups: None,
                 keywords: None,
             },
@@ -75,54 +78,6 @@ impl NewEntityBuilder {
     }
 }
 
-/// An struct to use for updating an existing entity
-#[derive(Debug, Serialize)]
-pub struct UpdatedEntity {
-    name: String,
-    roles: Vec<String>,
-    lookups: Option<Vec<String>>,
-    keywords: Option<Vec<Keyword>>,
-}
-
-/// Builder for `UpdatedEntity`--use for updating entities
-#[derive(Debug)]
-pub struct UpdatedEntityBuilder {
-    updated_entity: UpdatedEntity,
-}
-
-impl UpdatedEntityBuilder {
-    /// Create a `NewEntityBuilder` with the given name and roles, and empty lookups and keywords
-    /// * `name` - Name for the entity. For built-in entities, use the wit$ prefix.
-    pub fn new(name: String, roles: Vec<String>) -> Self {
-        Self {
-            updated_entity: UpdatedEntity {
-                name,
-                roles,
-                lookups: None,
-                keywords: None,
-            },
-        }
-    }
-
-    /// Set the lookup strategies for a custom entity (free-text, keywords).
-    /// Both lookup strategies will be created if this is left empty.
-    pub fn lookups(mut self, lookups: Vec<String>) -> Self {
-        self.updated_entity.lookups = Some(lookups);
-        self
-    }
-
-    /// Set the keywords associated with this entity
-    pub fn keywords(mut self, keywords: Vec<Keyword>) -> Self {
-        self.updated_entity.keywords = Some(keywords);
-        self
-    }
-
-    /// Create a `NewEntity` from this `NewEntityBuilder`
-    pub fn build(self) -> UpdatedEntity {
-        self.updated_entity
-    }
-}
-
 /// A response from creating, updating, or getting an entity
 #[derive(Debug, Deserialize, PartialEq)]
 pub struct EntityResponse {
@@ -148,19 +103,38 @@ pub struct EntityRole {
 }
 
 impl WitClient {
-    /// Returning basic information about all entities
+    /// Returns basic information about all entities
+    ///
+    /// Example:
+    /// ```rust
+    /// let response: Vec<EntityBasic> = wit_client.get_entities().await.unwrap();
+    /// ```
     pub async fn get_entities(&self) -> Result<Vec<EntityBasic>, Error> {
         self.make_request(Method::GET, "/entities", vec![], Option::<Value>::None)
             .await
     }
 
     /// Creates a new entity
+    ///
+    /// Example:
+    /// ```rust
+    /// let new_entity = NewEntityBuilder::new("entity_name".to_string())
+    ///     .roles(vec!["role".to_string()])
+    ///     .build();
+    ///
+    /// let response: EntityResponse = wit_client.create_entity(new_entity).await.unwrap();
+    /// ```
     pub async fn create_entity(&self, new_entity: NewEntity) -> Result<EntityResponse, Error> {
         self.make_request(Method::POST, "/entities", vec![], Some(new_entity))
             .await
     }
 
     /// Returns information about the entity with the given name
+    ///
+    /// Example:
+    /// ```rust
+    /// let response: EntityResponse = wit_client.get_entity("entity".to_string()).await.unwrap();
+    /// ```
     pub async fn get_entity(&self, entity_name: String) -> Result<EntityResponse, Error> {
         let endpoint = format!("/entities/{}", entity_name);
 
@@ -168,11 +142,21 @@ impl WitClient {
             .await
     }
 
-    /// Update information about an entity with the current name `old_name`, overwriting its data with `updated_entity`
+    /// Update information about an entity with the current name `old_name`, overwriting its
+    /// data with `updated_entity`
+    ///
+    /// Example:
+    /// ```rust
+    /// let updated_entity = NewEntityBuilder::new("updated_name".to_string())
+    ///     .roles(vec!["updated_role".to_string()])
+    ///     .build();
+    ///
+    /// let response: EntityResponse = wit_client.update_entity(new_entity).await.unwrap();
+    /// ```
     pub async fn update_entity(
         &self,
         old_name: &str,
-        updated_entity: UpdatedEntity,
+        updated_entity: NewEntity,
     ) -> Result<EntityResponse, Error> {
         let endpoint = format!("/entities/{}", old_name);
 
@@ -181,6 +165,11 @@ impl WitClient {
     }
 
     /// Deletes the entity with the given name
+    ///
+    /// Example:
+    /// ```rust
+    /// let response: DeleteResponse = wit_client.delete_entity("entity_name").await.unwrap();
+    /// ```
     pub async fn delete_entity(&self, entity_name: &str) -> Result<DeleteResponse, Error> {
         let endpoint = format!("/entities/{}", entity_name);
 

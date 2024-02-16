@@ -19,6 +19,11 @@ pub struct WitClient {
 impl WitClient {
     /// Create a new WitClient with the given `auth_token` and `version` and the default
     /// API host. `version` is a date string of the form yyyymmdd (ex. 20231231)
+    ///
+    /// Example:
+    /// ```rust
+    /// let wit_client = WitClient::new("TOKEN".to_string(), "20240215".to_string());
+    /// ```
     pub fn new(auth_token: String, version: String) -> Self {
         let api_host = String::from(DEFAULT_API_HOST);
 
@@ -33,6 +38,12 @@ impl WitClient {
     }
 
     /// Changes the API host--only recommended for use while testing
+    ///
+    /// Example:
+    /// ```rust
+    /// let wit_client = WitClient::new("TOKEN".to_string(), "20240215".to_string())
+    ///     .set_api_host("https://host.com");
+    /// ```
     pub fn set_api_host(self, api_host: String) -> Self {
         Self {
             api_host,

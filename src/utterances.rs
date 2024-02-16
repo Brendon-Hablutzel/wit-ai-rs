@@ -1,4 +1,4 @@
-//! Interacting with Wit utterances
+//! Interacting with wit utterances
 
 use crate::{client::WitClient, errors::Error, IntentBasic};
 use reqwest::Method;
@@ -79,11 +79,11 @@ pub struct NewUtteranceEntity {
 
 impl NewUtteranceEntity {
     /// Create a `NewUtteranceEntity`, which provides data about an entity associated with an utterance
-    /// * `entity` - the name and role of the entity (ex. `entity:role` or `wit$number:number` for built-in entities)
+    /// * `entity` - the name and role of the entity (ex. `entity:role`, or `wit$number:number` for built-in entities)
     /// * `start` - the start index of the entity value in the text of the utterance (inclusive)
     /// * `end` - the end index of the entity value in the text of the utterance (exclusive)
     /// * `body` - the value of the entity as it appears in the text
-    /// * `entity` - other entities associated with this entity
+    /// * `entity` - other entities within this entity
     pub fn new(
         entity: String,
         start: u32,
@@ -123,9 +123,9 @@ impl NewUtteranceTrait {
 #[derive(Debug, Serialize)]
 pub struct NewUtterance {
     text: String,
-    intent: Option<String>,
     entities: Vec<NewUtteranceEntity>,
     traits: Vec<NewUtteranceTrait>,
+    intent: Option<String>,
 }
 
 impl NewUtterance {
@@ -212,6 +212,17 @@ pub struct UtteranceResponseTrait {
 
 impl WitClient {
     /// Return information about all utterances associated with the given app
+    ///
+    /// Example:
+    /// ```rust
+    /// let request = GetUtterancesRequestBuilder::new(5)
+    ///     .unwrap()
+    ///     .offset(10)
+    ///     .intents(vec!["intent_name".to_string()])
+    ///     .build();
+    ///
+    /// let response = wit_client.get_utterances(request).await.unwrap();
+    /// ```
     pub async fn get_utterances(
         &self,
         utterances_request: GetUtterancesRequest,
@@ -229,6 +240,31 @@ impl WitClient {
     }
 
     /// Create new utterances for the given app
+    ///
+    /// Example:
+    /// ```rust
+    /// let utterance_entity = NewUtteranceEntity::new(
+    ///     "entity:entity".to_string(),
+    ///     3,
+    ///     12,
+    ///     "utterance".to_string(),
+    ///     vec![],
+    /// );
+    ///
+    /// let utterance_trait = NewUtteranceTrait::new("trait_name".to_string(), "value1".to_string());
+    ///
+    /// let new_utterance = NewUtterance::new(
+    ///     "an utterance".to_string(),
+    ///     vec![utterance_entity],
+    ///     vec![utterance_trait],
+    ///     Some("intent_name".to_string()),
+    /// );
+    ///
+    /// let response: CreateUtteranceResponse = wit_client
+    ///     .create_utterances(vec![new_utterance])
+    ///     .await
+    ///     .unwrap();
+    /// ```
     pub async fn create_utterances(
         &self,
         utterances: Vec<NewUtterance>,
@@ -242,6 +278,13 @@ impl WitClient {
 
     /// Delete utterances
     /// * `utterance_texts` - a vector of strings, where each string is the text of an utterance to delete
+    ///
+    /// Example:
+    /// ```rust
+    /// let utterances = vec!["an utterance".to_string()];
+    ///
+    /// let response = wit_client.delete_utterances(utterances).await.unwrap();
+    /// ```
     pub async fn delete_utterances(
         &self,
         utterance_texts: Vec<String>,

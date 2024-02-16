@@ -5,13 +5,13 @@ use serde::Deserialize;
 /// Errors that may occur while using the wit_ai_rs crate
 #[derive(Debug)]
 pub enum Error {
-    /// An error while sending the HTTP request to Wit
+    /// An error while sending the HTTP request to wit
     RequestError(reqwest::Error),
     /// An error parsing the HTTP request body
     ResponseParseError(reqwest::Error),
     /// An invalid argument was passed to a function
     InvalidArgument(String),
-    /// The request was sent and the response parsed successfully, but Wit returned an error
+    /// The request was sent and the response parsed successfully, but wit returned an error
     WitError(ErrorResponse),
     /// An error parsing the url (base string + headers)
     URLParseError(url::ParseError),

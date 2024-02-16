@@ -73,9 +73,6 @@ impl WitClient {
     /// // Load an audio file
     /// let file = tokio::fs::File::open("test.mp3").await.unwrap();
     ///
-    /// // Create a wit client
-    /// let wit_client = WitClientBuilder::new(TOKEN.to_string(), "2024-02-15".to_string()).build();
-    ///
     /// // Send the file
     /// let result = wit_client
     ///     .dictation(file, dictation::AudioType::MP3)

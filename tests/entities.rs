@@ -1,7 +1,7 @@
 use mockito::Matcher;
 use wit_ai_rs::{
     client::WitClient,
-    entities::{EntityResponse, EntityRole, Keyword, NewEntityBuilder, UpdatedEntityBuilder},
+    entities::{EntityResponse, EntityRole, Keyword, NewEntityBuilder},
     DeleteResponse, EntityBasic,
 };
 
@@ -47,11 +47,7 @@ async fn update_entity() {
 
     let client = WitClient::new(String::from(token), String::from("20231231"));
 
-    let updated_entity = UpdatedEntityBuilder::new(
-        String::from("Another_Entity_2"),
-        vec![String::from("Another_Entity_2")],
-    )
-    .build();
+    let updated_entity = NewEntityBuilder::new(String::from("Another_Entity_2")).build();
 
     let _response = client
         .update_entity("another_entity", updated_entity)
@@ -278,29 +274,26 @@ async fn update_entity_mock() {
         ]),
     };
 
-    let updated_entity = UpdatedEntityBuilder::new(
-        String::from("Favorite_City"),
-        vec![String::from("Favorite_City")],
-    )
-    .keywords(vec![
-        Keyword {
-            keyword: String::from("Paris"),
-            synonyms: vec![
-                String::from("Paris"),
-                String::from("City of Light"),
-                String::from("Capital of France"),
-            ],
-        },
-        Keyword {
-            keyword: String::from("Seoul"),
-            synonyms: vec![
-                String::from("Seoul"),
-                String::from("서울"),
-                String::from("Kimchi paradise"),
-            ],
-        },
-    ])
-    .build();
+    let updated_entity = NewEntityBuilder::new(String::from("Favorite_City"))
+        .keywords(vec![
+            Keyword {
+                keyword: String::from("Paris"),
+                synonyms: vec![
+                    String::from("Paris"),
+                    String::from("City of Light"),
+                    String::from("Capital of France"),
+                ],
+            },
+            Keyword {
+                keyword: String::from("Seoul"),
+                synonyms: vec![
+                    String::from("Seoul"),
+                    String::from("서울"),
+                    String::from("Kimchi paradise"),
+                ],
+            },
+        ])
+        .build();
 
     let response = client
         .update_entity("favorite_city", updated_entity)
