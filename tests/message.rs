@@ -5,7 +5,7 @@ use wit_ai_rs::{
     client::WitClient,
     message::{
         ContextBuilder, Coordinates, IntervalEndpoint, MessageEntity, MessageIntent,
-        MessageRequestBuilder, MessageResponse,
+        MessageOptions, MessageOptionsBuilder, MessageResponse,
     },
 };
 
@@ -26,13 +26,13 @@ async fn message() {
         .coords(Coordinates::new(37.47104, -122.14703))
         .build();
 
-    let message = MessageRequestBuilder::new(String::from(query))
+    let message = MessageOptionsBuilder::new()
         .context(context)
         .limit(1)
-        .unwrap()
+        .expect("hardcoded limit should be valid")
         .build();
 
-    let response = client.message(message).await.unwrap();
+    let response = client.message(query.to_string(), message).await.unwrap();
 
     assert!(response.intents.len() <= 1);
 }
@@ -60,9 +60,10 @@ async fn message_mock() {
 
     let query = "how many people between Tuesday and Friday";
 
-    let message_request = MessageRequestBuilder::new(String::from(query)).build();
-
-    let response = client.message(message_request).await.unwrap();
+    let response = client
+        .message(query.to_string(), MessageOptions::default())
+        .await
+        .unwrap();
 
     let mut entities = HashMap::new();
 

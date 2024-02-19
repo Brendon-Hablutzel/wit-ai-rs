@@ -1,20 +1,29 @@
 //! Interacting with the message endpoint
 
-use crate::{client::WitClient, errors::Error};
+use crate::{client::WitClient, errors::Error, DynamicEntities};
 use reqwest::Method;
 use serde::{Deserialize, Serialize};
 use serde_json::Value;
 use std::collections::HashMap;
 
 /// Context that may be sent with a message
-#[derive(Debug)]
+#[derive(Debug, Serialize)]
 pub struct Context {
     // serialized version of ContextBuilder, since Context will be passed as a serialized string in the url params
-    serialized: String,
+    reference_time: Option<String>,
+    timezone: Option<String>,
+    locale: Option<String>,
+    coords: Option<Coordinates>,
+}
+
+impl Context {
+    fn get_serialized(&self) -> String {
+        serde_json::to_string(&self).expect("should be able to serialize `Context` struct")
+    }
 }
 
 /// Builder for Context
-#[derive(Debug, Serialize)]
+#[derive(Debug)]
 pub struct ContextBuilder {
     reference_time: Option<String>,
     timezone: Option<String>,
@@ -42,16 +51,19 @@ impl ContextBuilder {
     }
 
     /// Set the local timezone of the user, which must be a valid IANA timezone.
-    /// Used only if no reference_time is provided--we will compute reference_time from timezone and the UTC time of the API server.
-    /// If neither reference_time nor timezone are provided, we will use the default timezone of your app, which you can set in 'Settings' in the web console.
+    /// Used only if no reference_time is provided--wit will compute reference_time from
+    /// timezone and the UTC time of the API server. If neither reference_time nor timezone
+    /// are provided, wit will use the default timezone of your app, which you can set in 'Settings'
+    /// in the web console.
     /// Example: "America/Los_Angeles"
     pub fn timezone(mut self, timezone: String) -> Self {
         self.timezone = Some(timezone);
         self
     }
 
-    /// Set the locale of the user: the first 2 letters must be a valid ISO639-1 language, followed by an underscore, followed by a valid ISO3166 alpha2 country code.
-    /// Example: "en_GB".
+    /// Set the locale of the user: the first 2 letters must be a valid ISO639-1 language, followed by an underscore,
+    /// followed by a valid ISO3166 alpha2 country code.
+    /// Example: "en_US".
     pub fn locale(mut self, value: String) -> Self {
         self.locale = Some(value);
         self
@@ -66,10 +78,12 @@ impl ContextBuilder {
 
     /// Serialize the `ContextBuilder`, turning it into a `Context`
     pub fn build(self) -> Context {
-        let serialized =
-            serde_json::to_string(&self).expect("should be able to serialize `Context` struct");
-
-        Context { serialized }
+        Context {
+            reference_time: self.reference_time,
+            timezone: self.timezone,
+            locale: self.locale,
+            coords: self.coords,
+        }
     }
 }
 
@@ -97,30 +111,32 @@ impl Coordinates {
     }
 }
 
-/// A request to send to the message endpoint
-#[derive(Debug)]
-pub struct MessageRequest {
-    url_params: Vec<(String, String)>,
-}
-
-/// Builder for `MessageRequest`
-#[derive(Debug)]
-pub struct MessageRequestBuilder {
-    query: String,
+/// Options to include with a request to the message endpoint
+#[derive(Debug, Default)]
+pub struct MessageOptions {
     tag: Option<String>,
     n: Option<u16>,
     context: Option<Context>,
+    dynamic_entities: Option<DynamicEntities>,
 }
 
-impl MessageRequestBuilder {
-    /// Initialize a new `MessageRequestBuilder`, with the given query and all other fields empty.
-    /// Note: query must be no more than 280 characters.
-    pub fn new(query: String) -> Self {
-        MessageRequestBuilder {
-            query,
+/// Builder for `MessageOptions`
+#[derive(Debug)]
+pub struct MessageOptionsBuilder {
+    tag: Option<String>,
+    n: Option<u16>,
+    context: Option<Context>,
+    dynamic_entities: Option<DynamicEntities>,
+}
+
+impl MessageOptionsBuilder {
+    /// Creates a new MessageOptionsBuilder with all values set to None
+    pub fn new() -> Self {
+        MessageOptionsBuilder {
             tag: None,
             n: None,
             context: None,
+            dynamic_entities: None,
         }
     }
 
@@ -149,25 +165,27 @@ impl MessageRequestBuilder {
         self
     }
 
-    /// Turn the `MessageRequestBuilder` into a `MessageRequest`
-    pub fn build(self) -> MessageRequest {
-        let mut url_params = Vec::new();
+    /// Sets the dynamic entities for the message
+    pub fn dynamic_entities(mut self, entities: DynamicEntities) -> Self {
+        self.dynamic_entities = Some(entities);
+        self
+    }
 
-        url_params.push((String::from("q"), self.query));
-
-        if let Some(tag) = self.tag {
-            url_params.push((String::from("tag"), tag));
+    /// Turn this `MessageOptionsBuilder` into a `MessageOptions`
+    pub fn build(self) -> MessageOptions {
+        MessageOptions {
+            tag: self.tag,
+            n: self.n,
+            context: self.context,
+            dynamic_entities: self.dynamic_entities,
         }
+    }
+}
 
-        if let Some(n) = self.n {
-            url_params.push((String::from("n"), n.to_string()));
-        }
-
-        if let Some(context) = self.context {
-            url_params.push((String::from("context"), context.serialized));
-        }
-
-        MessageRequest { url_params }
+impl Default for MessageOptionsBuilder {
+    /// Default constructor for MessageOptionsBuilder that sets all fields to None
+    fn default() -> Self {
+        Self::new()
     }
 }
 
@@ -254,48 +272,85 @@ pub struct MessageTrait {
 impl WitClient {
     /// Send a request to wit's /message endpoint, using a request builder `MessageRequestBuilder`.
     /// Information regarding each argument that can be used in `MessageRequestBuilder` can be found
-    /// in the documentation for that struct.
+    /// in the documentation for that struct. Note that query may be no more than 280 characters.
     ///
-    /// Example:
+    /// Example (simple message, no additional options):
     /// ```rust,no_run
     /// # tokio_test::block_on(async {
     /// # use wit_ai_rs::client::WitClient;
-    /// # use wit_ai_rs::message::{MessageResponse, MessageRequestBuilder};
+    /// # use wit_ai_rs::message::{MessageResponse, MessageOptions};
     /// # let wit_client = WitClient::new(String::new(), String::new());
-    /// let request = MessageRequestBuilder::new("Some query sentence".to_string())
-    ///     .limit(2)
-    ///     .unwrap()
-    ///     .build();
+    /// let response: MessageResponse = wit_client
+    ///     .message("some query sentence".to_string(), MessageOptions::default())
+    ///     .await
+    ///     .unwrap();
     ///
-    /// let response: MessageResponse = wit_client.message(request).await.unwrap();
     /// # })
     /// ```
-    pub async fn message(&self, request: MessageRequest) -> Result<MessageResponse, Error> {
-        self.make_request(
-            Method::GET,
-            "/message",
-            request.url_params,
-            Option::<Value>::None,
-        )
-        .await
-    }
-
-    /// Send a request to wit's /message endpoint, using the given query string and
-    /// defaults for the other arguments.
     ///
-    /// Example:
+    /// Example (with option customization):
     /// ```rust,no_run
     /// # tokio_test::block_on(async {
     /// # use wit_ai_rs::client::WitClient;
-    /// # use wit_ai_rs::message::MessageResponse;
+    /// # use wit_ai_rs::message::{
+    /// #    MessageResponse, MessageOptions, MessageOptionsBuilder, Context, ContextBuilder
+    /// # };
     /// # let wit_client = WitClient::new(String::new(), String::new());
-    /// let response: MessageResponse = wit_client.message_simple("Some query sentence".to_string())
+    /// let context: Context = ContextBuilder::new()
+    ///     .timezone("America/Los_Angeles".to_string())
+    ///     .locale("en_US".to_string())
+    ///     .build();
+    ///
+    /// let message_options: MessageOptions = MessageOptionsBuilder::new()
+    ///     .limit(2)
+    ///     .unwrap()
+    ///     .context(context)
+    ///     .build();
+    ///
+    /// let response: MessageResponse = wit_client
+    ///     .message("some query sentence".to_string(), message_options)
     ///     .await
     ///     .unwrap();
     /// # })
     /// ```
-    pub async fn message_simple(&self, query: String) -> Result<MessageResponse, Error> {
-        let request = MessageRequestBuilder::new(query).build();
-        self.message(request).await
+    ///
+    /// Example (with dynamic entities):
+    /// ```rust,no_run
+    /// # tokio_test::block_on(async {
+    /// # use wit_ai_rs::client::WitClient;
+    /// # use wit_ai_rs::message::{
+    /// #    MessageResponse, MessageOptions, MessageOptionsBuilder, Context, ContextBuilder
+    /// # };
+    /// # let wit_client = WitClient::new(String::new(), String::new());
+    ///
+    /// # })
+    /// ```
+    pub async fn message(
+        &self,
+        query: String,
+        options: MessageOptions,
+    ) -> Result<MessageResponse, Error> {
+        let mut url_params = Vec::new();
+
+        url_params.push((String::from("q"), query));
+
+        if let Some(tag) = options.tag {
+            url_params.push((String::from("tag"), tag));
+        }
+
+        if let Some(n) = options.n {
+            url_params.push((String::from("n"), n.to_string()));
+        }
+
+        if let Some(context) = options.context {
+            url_params.push((String::from("context"), context.get_serialized()));
+        }
+
+        if let Some(entities) = options.dynamic_entities {
+            url_params.push((String::from("entities"), entities.get_serialized()))
+        }
+
+        self.make_request(Method::GET, "/message", url_params, Option::<Value>::None)
+            .await
     }
 }

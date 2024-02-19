@@ -3,26 +3,10 @@
 //! Includes methods for CRUD operations so that entities can be
 //! managed programmatically
 
-use crate::{client::WitClient, errors::Error, DeleteResponse, EntityBasic};
+use crate::{client::WitClient, errors::Error, DeleteResponse, EntityBasic, EntityKeyword};
 use reqwest::Method;
 use serde::{Deserialize, Serialize};
 use serde_json::Value;
-
-/// Keywords associated with entities that may be extracted from text
-#[derive(Debug, Serialize, Deserialize, PartialEq)]
-pub struct Keyword {
-    /// Canonical value of the entity.
-    pub keyword: String,
-    /// Ways of expressing, or aliases for this canonical value.
-    pub synonyms: Vec<String>,
-}
-
-impl Keyword {
-    /// Create a new Keyword struct
-    pub fn new(keyword: String, synonyms: Vec<String>) -> Self {
-        Self { keyword, synonyms }
-    }
-}
 
 /// A struct to use for creating a new entity
 #[derive(Debug, Serialize)]
@@ -30,7 +14,7 @@ pub struct NewEntity {
     name: String,
     roles: Vec<String>,
     lookups: Option<Vec<String>>,
-    keywords: Option<Vec<Keyword>>,
+    keywords: Option<Vec<EntityKeyword>>,
 }
 
 /// Builder for `NewEntity`--use for creating entities
@@ -67,7 +51,7 @@ impl NewEntityBuilder {
     }
 
     /// Set the keywords associated with this entity
-    pub fn keywords(mut self, keywords: Vec<Keyword>) -> Self {
+    pub fn keywords(mut self, keywords: Vec<EntityKeyword>) -> Self {
         self.new_entity.keywords = Some(keywords);
         self
     }
@@ -90,7 +74,7 @@ pub struct EntityResponse {
     /// Lookup strategies for the entity. Does not exist when the entity is built into Wit
     pub lookups: Option<Vec<String>>,
     /// Keywords associated with the entity. Does not exist when the entity is built into Wit
-    pub keywords: Option<Vec<Keyword>>,
+    pub keywords: Option<Vec<EntityKeyword>>,
 }
 
 /// A role for an entity

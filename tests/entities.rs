@@ -1,8 +1,8 @@
 use mockito::Matcher;
 use wit_ai_rs::{
     client::WitClient,
-    entities::{EntityResponse, EntityRole, Keyword, NewEntityBuilder},
-    DeleteResponse, EntityBasic,
+    entities::{EntityResponse, EntityRole, NewEntityBuilder},
+    DeleteResponse, EntityBasic, EntityKeyword,
 };
 
 #[tokio::test]
@@ -189,27 +189,27 @@ async fn get_one_entity_mock() {
             name: String::from("first_name"),
         }],
         keywords: Some(vec![
-            Keyword {
+            EntityKeyword {
                 keyword: String::from("Willy"),
                 synonyms: vec![String::from("Willy")],
             },
-            Keyword {
+            EntityKeyword {
                 keyword: String::from("Laurent"),
                 synonyms: vec![String::from("Laurent")],
             },
-            Keyword {
+            EntityKeyword {
                 keyword: String::from("Julien"),
                 synonyms: vec![String::from("Julien")],
             },
-            Keyword {
+            EntityKeyword {
                 keyword: String::from("Alex"),
                 synonyms: vec![String::from("Alex")],
             },
-            Keyword {
+            EntityKeyword {
                 keyword: String::from("Aleka"),
                 synonyms: vec![String::from("Aleka")],
             },
-            Keyword {
+            EntityKeyword {
                 keyword: String::from("Jason"),
                 synonyms: vec![String::from("Jason")],
             },
@@ -255,7 +255,7 @@ async fn update_entity_mock() {
         }],
         lookups: Some(vec![String::from("free-text"), String::from("keywords")]),
         keywords: Some(vec![
-            Keyword {
+            EntityKeyword {
                 keyword: String::from("Paris"),
                 synonyms: vec![
                     String::from("Paris"),
@@ -263,7 +263,7 @@ async fn update_entity_mock() {
                     String::from("Capital of France"),
                 ],
             },
-            Keyword {
+            EntityKeyword {
                 keyword: String::from("Seoul"),
                 synonyms: vec![
                     String::from("Seoul"),
@@ -276,7 +276,7 @@ async fn update_entity_mock() {
 
     let updated_entity = NewEntityBuilder::new(String::from("Favorite_City"))
         .keywords(vec![
-            Keyword {
+            EntityKeyword {
                 keyword: String::from("Paris"),
                 synonyms: vec![
                     String::from("Paris"),
@@ -284,7 +284,7 @@ async fn update_entity_mock() {
                     String::from("Capital of France"),
                 ],
             },
-            Keyword {
+            EntityKeyword {
                 keyword: String::from("Seoul"),
                 synonyms: vec![
                     String::from("Seoul"),

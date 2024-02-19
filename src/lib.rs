@@ -14,8 +14,12 @@
 //! ```rust,no_run
 //! # tokio_test::block_on(async {
 //! # use wit_ai_rs::client::WitClient;
+//! # use wit_ai_rs::message::{MessageResponse, MessageOptions};
 //! # let wit_client = WitClient::new(String::new(), String::new());
-//! let response = wit_client.message_simple("Some query sentence".to_string()).await.unwrap();
+//! let response: MessageResponse = wit_client
+//!     .message("Some query sentence".to_string(), MessageOptions::default())
+//!     .await
+//!     .unwrap();
 //! # })
 //! ```
 //! Examples for most methods can be found in their respective modules. For each of these examples,
