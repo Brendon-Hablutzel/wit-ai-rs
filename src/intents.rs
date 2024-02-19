@@ -24,8 +24,13 @@ impl WitClient {
     /// Get basic information about all intents associated with an app
     ///
     /// Example:
-    /// ```rust,ignore
-    /// let response = wit_client.get_intents().await.unwrap();
+    /// ```rust,no_run
+    /// # tokio_test::block_on(async {
+    /// # use wit_ai_rs::client::WitClient;
+    /// # use wit_ai_rs::IntentBasic;
+    /// # let wit_client = WitClient::new(String::new(), String::new());
+    /// let response: Vec<IntentBasic> = wit_client.get_intents().await.unwrap();
+    /// # })
     /// ```
     pub async fn get_intents(&self) -> Result<Vec<IntentBasic>, Error> {
         self.make_request(Method::GET, "/intents", vec![], Option::<Value>::None)
@@ -35,8 +40,13 @@ impl WitClient {
     /// Create a new intent
     ///
     /// Example:
-    /// ```rust,ignore
-    /// let response = wit_client.create_intent("intent_name").await.unwrap();
+    /// ```rust,no_run
+    /// # tokio_test::block_on(async {
+    /// # use wit_ai_rs::client::WitClient;
+    /// # use wit_ai_rs::IntentBasic;
+    /// # let wit_client = WitClient::new(String::new(), String::new());
+    /// let response: IntentBasic = wit_client.create_intent("intent_name").await.unwrap();
+    /// # })
     /// ```
     pub async fn create_intent(&self, intent_name: &str) -> Result<IntentBasic, Error> {
         let new_intent = json!({"name": intent_name});
@@ -48,8 +58,13 @@ impl WitClient {
     /// Get more detailed information about a specific intent
     ///
     /// Example:
-    /// ```rust,ignore
-    /// let response = wit_client.get_intent("intent_name").await.unwrap();
+    /// ```rust,no_run
+    /// # tokio_test::block_on(async {
+    /// # use wit_ai_rs::client::WitClient;
+    /// # use wit_ai_rs::intents::IntentResponse;
+    /// # let wit_client = WitClient::new(String::new(), String::new());
+    /// let response: IntentResponse = wit_client.get_intent("intent_name").await.unwrap();
+    /// # })
     /// ```
     pub async fn get_intent(&self, intent_name: &str) -> Result<IntentResponse, Error> {
         let endpoint = format!("/intents/{}", intent_name);
@@ -61,8 +76,13 @@ impl WitClient {
     /// Delete an intent by name
     ///
     /// Example:
-    /// ```rust,ignore
-    /// let response = wit_client.delete_intent("intent_name").await.unwrap();
+    /// ```rust,no_run
+    /// # tokio_test::block_on(async {
+    /// # use wit_ai_rs::client::WitClient;
+    /// # use wit_ai_rs::DeleteResponse;
+    /// # let wit_client = WitClient::new(String::new(), String::new());
+    /// let response: DeleteResponse = wit_client.delete_intent("intent_name").await.unwrap();
+    /// # })
     /// ```
     pub async fn delete_intent(&self, intent_name: &str) -> Result<DeleteResponse, Error> {
         let endpoint = format!("/intents/{}", intent_name);

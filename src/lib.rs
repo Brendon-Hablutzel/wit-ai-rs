@@ -11,8 +11,12 @@
 //!
 //! Specific endpoints can be called using various methods of the WitClient struct, for
 //! example the message endpoint can be called as follows:
-//! ```rust,ignore
+//! ```rust,no_run
+//! # tokio_test::block_on(async {
+//! # use wit_ai_rs::client::WitClient;
+//! # let wit_client = WitClient::new(String::new(), String::new());
 //! let response = wit_client.message_simple("Some query sentence".to_string()).await.unwrap();
+//! # })
 //! ```
 //! Examples for most methods can be found in their respective modules. For each of these examples,
 //! assume that `wit_client` is a valid WitClient.

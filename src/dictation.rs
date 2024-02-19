@@ -69,19 +69,30 @@ impl WitClient {
     /// variant is a single object, a DictationResponse, representing a partial transcription
     ///
     /// Example:
-    /// ```rust,ignore
+    /// ```rust,no_run
+    /// # tokio_test::block_on(async {
+    /// # use wit_ai_rs::client::WitClient;
+    /// # use wit_ai_rs::errors::Error;
+    /// # use wit_ai_rs::dictation::{AudioType, DictationResponse};
+    /// # use futures::StreamExt;
+    /// # let wit_client = WitClient::new(String::new(), String::new());
+    /// async fn process(res: Result<DictationResponse, Error>) {
+    ///     println!("{:?}", res);
+    /// }
+    ///
     /// // Load an audio file
     /// let file = tokio::fs::File::open("test.mp3").await.unwrap();
     ///
     /// // Send the file
     /// let result = wit_client
-    ///     .dictation(file, dictation::AudioType::MP3)
+    ///     .dictation(file, AudioType::MP3)
     ///     .await // for sending the file
     ///     .unwrap();
     ///
-    /// // process the results, where `process` is
-    /// // some async function that handles a `Result<DictationResponse, Error>
+    /// // process the results, where `process` is some
+    /// // async function that handles a `Result<DictationResponse, Error>
     /// result.for_each(process).await;
+    /// # })
     /// ```
     pub async fn dictation(
         &self,

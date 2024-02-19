@@ -214,14 +214,19 @@ impl WitClient {
     /// Return information about all utterances associated with the given app
     ///
     /// Example:
-    /// ```rust,ignore
+    /// ```rust,no_run
+    /// # tokio_test::block_on(async {
+    /// # use wit_ai_rs::client::WitClient;
+    /// # use wit_ai_rs::utterances::{GetUtterancesRequestBuilder, UtteranceResponse};
+    /// # let wit_client = WitClient::new(String::new(), String::new());
     /// let request = GetUtterancesRequestBuilder::new(5)
     ///     .unwrap()
     ///     .offset(10)
     ///     .intents(vec!["intent_name".to_string()])
     ///     .build();
     ///
-    /// let response = wit_client.get_utterances(request).await.unwrap();
+    /// let response: Vec<UtteranceResponse> = wit_client.get_utterances(request).await.unwrap();
+    /// # })
     /// ```
     pub async fn get_utterances(
         &self,
@@ -242,7 +247,13 @@ impl WitClient {
     /// Create new utterances for the given app
     ///
     /// Example:
-    /// ```rust,ignore
+    /// ```rust,no_run
+    /// # tokio_test::block_on(async {
+    /// # use wit_ai_rs::client::WitClient;
+    /// # use wit_ai_rs::utterances::{
+    ///     NewUtteranceEntity, NewUtteranceTrait, NewUtterance, CreateUtteranceResponse
+    /// };
+    /// # let wit_client = WitClient::new(String::new(), String::new());
     /// let utterance_entity = NewUtteranceEntity::new(
     ///     "entity:entity".to_string(),
     ///     3,
@@ -264,6 +275,7 @@ impl WitClient {
     ///     .create_utterances(vec![new_utterance])
     ///     .await
     ///     .unwrap();
+    /// # })
     /// ```
     pub async fn create_utterances(
         &self,
@@ -280,10 +292,15 @@ impl WitClient {
     /// * `utterance_texts` - a vector of strings, where each string is the text of an utterance to delete
     ///
     /// Example:
-    /// ```rust,ignore
+    /// ```rust,no_run
+    /// # tokio_test::block_on(async {
+    /// # use wit_ai_rs::client::WitClient;
+    /// # use wit_ai_rs::utterances::DeleteUtteranceResponse;
+    /// # let wit_client = WitClient::new(String::new(), String::new());
     /// let utterances = vec!["an utterance".to_string()];
     ///
-    /// let response = wit_client.delete_utterances(utterances).await.unwrap();
+    /// let response: DeleteUtteranceResponse = wit_client.delete_utterances(utterances).await.unwrap();
+    /// # })    
     /// ```
     pub async fn delete_utterances(
         &self,

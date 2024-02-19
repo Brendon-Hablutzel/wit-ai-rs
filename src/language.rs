@@ -25,10 +25,15 @@ impl WitClient {
     /// Make a request to the language endpoint
     ///
     /// Example:
-    /// ```rust,ignore
+    /// ```rust,no_run
+    /// # tokio_test::block_on(async {
+    /// # use wit_ai_rs::client::WitClient;
+    /// # use wit_ai_rs::language::LanguageResponse;
+    /// # let wit_client = WitClient::new(String::new(), String::new());
     /// let response: LanguageResponse = wit_client.language("some query sentence".to_string(), 1)
     ///     .await
     ///     .unwrap();
+    /// # })
     /// ```
     pub async fn language(&self, query: String, limit: u16) -> Result<LanguageResponse, Error> {
         if !(1..=8).contains(&limit) {

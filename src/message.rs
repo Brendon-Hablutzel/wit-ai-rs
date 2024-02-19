@@ -257,13 +257,18 @@ impl WitClient {
     /// in the documentation for that struct.
     ///
     /// Example:
-    /// ```rust,ignore
+    /// ```rust,no_run
+    /// # tokio_test::block_on(async {
+    /// # use wit_ai_rs::client::WitClient;
+    /// # use wit_ai_rs::message::{MessageResponse, MessageRequestBuilder};
+    /// # let wit_client = WitClient::new(String::new(), String::new());
     /// let request = MessageRequestBuilder::new("Some query sentence".to_string())
     ///     .limit(2)
     ///     .unwrap()
     ///     .build();
     ///
     /// let response: MessageResponse = wit_client.message(request).await.unwrap();
+    /// # })
     /// ```
     pub async fn message(&self, request: MessageRequest) -> Result<MessageResponse, Error> {
         self.make_request(
@@ -279,10 +284,15 @@ impl WitClient {
     /// defaults for the other arguments.
     ///
     /// Example:
-    /// ```rust,ignore
+    /// ```rust,no_run
+    /// # tokio_test::block_on(async {
+    /// # use wit_ai_rs::client::WitClient;
+    /// # use wit_ai_rs::message::MessageResponse;
+    /// # let wit_client = WitClient::new(String::new(), String::new());
     /// let response: MessageResponse = wit_client.message_simple("Some query sentence".to_string())
     ///     .await
     ///     .unwrap();
+    /// # })
     /// ```
     pub async fn message_simple(&self, query: String) -> Result<MessageResponse, Error> {
         let request = MessageRequestBuilder::new(query).build();

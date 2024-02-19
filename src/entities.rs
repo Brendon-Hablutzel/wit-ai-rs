@@ -106,8 +106,13 @@ impl WitClient {
     /// Returns basic information about all entities
     ///
     /// Example:
-    /// ```rust,ignore
+    /// ```rust,no_run
+    /// # tokio_test::block_on(async {
+    /// # use wit_ai_rs::EntityBasic;
+    /// # use wit_ai_rs::client::WitClient;
+    /// # let wit_client = WitClient::new(String::new(), String::new());
     /// let response: Vec<EntityBasic> = wit_client.get_entities().await.unwrap();
+    /// # })
     /// ```
     pub async fn get_entities(&self) -> Result<Vec<EntityBasic>, Error> {
         self.make_request(Method::GET, "/entities", vec![], Option::<Value>::None)
@@ -117,12 +122,17 @@ impl WitClient {
     /// Creates a new entity
     ///
     /// Example:
-    /// ```rust,ignore
+    /// ```rust,no_run
+    /// # tokio_test::block_on(async {
+    /// # use wit_ai_rs::entities::{EntityResponse, NewEntityBuilder};
+    /// # use wit_ai_rs::client::WitClient;
+    /// # let wit_client = WitClient::new(String::new(), String::new());
     /// let new_entity = NewEntityBuilder::new("entity_name".to_string())
     ///     .roles(vec!["role".to_string()])
     ///     .build();
     ///
     /// let response: EntityResponse = wit_client.create_entity(new_entity).await.unwrap();
+    /// # })
     /// ```
     pub async fn create_entity(&self, new_entity: NewEntity) -> Result<EntityResponse, Error> {
         self.make_request(Method::POST, "/entities", vec![], Some(new_entity))
@@ -132,8 +142,13 @@ impl WitClient {
     /// Returns information about the entity with the given name
     ///
     /// Example:
-    /// ```rust,ignore
+    /// ```rust,no_run
+    /// # tokio_test::block_on(async {
+    /// # use wit_ai_rs::entities::EntityResponse;
+    /// # use wit_ai_rs::client::WitClient;
+    /// # let wit_client = WitClient::new(String::new(), String::new());
     /// let response: EntityResponse = wit_client.get_entity("entity".to_string()).await.unwrap();
+    /// # })
     /// ```
     pub async fn get_entity(&self, entity_name: String) -> Result<EntityResponse, Error> {
         let endpoint = format!("/entities/{}", entity_name);
@@ -146,12 +161,18 @@ impl WitClient {
     /// data with `updated_entity`
     ///
     /// Example:
-    /// ```rust,ignore
+    /// ```rust,no_run
+    /// # tokio_test::block_on(async {
+    /// # use wit_ai_rs::entities::{EntityResponse, NewEntityBuilder};
+    /// # use wit_ai_rs::client::WitClient;
+    /// # let wit_client = WitClient::new(String::new(), String::new());
     /// let updated_entity = NewEntityBuilder::new("updated_name".to_string())
     ///     .roles(vec!["updated_role".to_string()])
     ///     .build();
     ///
-    /// let response: EntityResponse = wit_client.update_entity(new_entity).await.unwrap();
+    /// let response: EntityResponse = wit_client
+    ///     .update_entity("entity_name", updated_entity).await.unwrap();
+    /// # })
     /// ```
     pub async fn update_entity(
         &self,
@@ -167,8 +188,13 @@ impl WitClient {
     /// Deletes the entity with the given name
     ///
     /// Example:
-    /// ```rust,ignore
+    /// ```rust,no_run
+    /// # tokio_test::block_on(async {
+    /// # use wit_ai_rs::DeleteResponse;
+    /// # use wit_ai_rs::client::WitClient;
+    /// # let wit_client = WitClient::new(String::new(), String::new());
     /// let response: DeleteResponse = wit_client.delete_entity("entity_name").await.unwrap();
+    /// # })
     /// ```
     pub async fn delete_entity(&self, entity_name: &str) -> Result<DeleteResponse, Error> {
         let endpoint = format!("/entities/{}", entity_name);
