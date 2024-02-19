@@ -318,11 +318,28 @@ impl WitClient {
     /// ```rust,no_run
     /// # tokio_test::block_on(async {
     /// # use wit_ai_rs::client::WitClient;
-    /// # use wit_ai_rs::message::{
-    /// #    MessageResponse, MessageOptions, MessageOptionsBuilder, Context, ContextBuilder
+    /// # use wit_ai_rs::{
+    /// #    message::{
+    /// #       MessageResponse, MessageOptionsBuilder, Context, ContextBuilder
+    /// #   },
+    /// #   DynamicEntity, DynamicEntities, EntityKeyword
     /// # };
     /// # let wit_client = WitClient::new(String::new(), String::new());
+    /// let entity = DynamicEntity::new(
+    ///     "entity_name".to_string(),
+    ///     vec![EntityKeyword::new("keyword".to_string(), vec!["synonym".to_string()])]
+    /// );
     ///
+    /// let entities = DynamicEntities::new(vec![entity]);
+    ///
+    /// let options = MessageOptionsBuilder::new()
+    ///     .dynamic_entities(entities)
+    ///     .build();
+    ///
+    /// let response: MessageResponse = wit_client
+    ///     .message("some query sentence".to_string(), options)
+    ///     .await
+    ///     .unwrap();
     /// # })
     /// ```
     pub async fn message(

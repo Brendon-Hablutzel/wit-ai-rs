@@ -251,8 +251,8 @@ impl WitClient {
     /// # tokio_test::block_on(async {
     /// # use wit_ai_rs::client::WitClient;
     /// # use wit_ai_rs::utterances::{
-    ///     NewUtteranceEntity, NewUtteranceTrait, NewUtterance, CreateUtteranceResponse
-    /// };
+    /// #    NewUtteranceEntity, NewUtteranceTrait, NewUtterance, CreateUtteranceResponse
+    /// # };
     /// # let wit_client = WitClient::new(String::new(), String::new());
     /// let utterance_entity = NewUtteranceEntity::new(
     ///     "entity:entity".to_string(),
