@@ -20,7 +20,7 @@ async fn language() {
 
 #[tokio::test]
 async fn language_mock() {
-    let mut server = mockito::Server::new();
+    let mut server = mockito::Server::new_async().await;
 
     let url = server.url();
 

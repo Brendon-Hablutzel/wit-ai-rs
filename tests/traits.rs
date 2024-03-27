@@ -56,7 +56,7 @@ async fn delete_trait() {
 
 #[tokio::test]
 async fn get_all_traits_mock() {
-    let mut server = mockito::Server::new();
+    let mut server = mockito::Server::new_async().await;
     let url = server.url();
 
     let client =
@@ -98,7 +98,7 @@ async fn get_all_traits_mock() {
 
 #[tokio::test]
 async fn create_trait_mock() {
-    let mut server = mockito::Server::new();
+    let mut server = mockito::Server::new_async().await;
     let url = server.url();
 
     let client =
@@ -145,7 +145,7 @@ async fn create_trait_mock() {
 
 #[tokio::test]
 async fn get_trait_mock() {
-    let mut server = mockito::Server::new();
+    let mut server = mockito::Server::new_async().await;
     let url = server.url();
 
     let client =
@@ -189,7 +189,7 @@ async fn get_trait_mock() {
 
 #[tokio::test]
 async fn delete_trait_mock() {
-    let mut server = mockito::Server::new();
+    let mut server = mockito::Server::new_async().await;
     let url = server.url();
 
     let client =

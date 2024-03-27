@@ -62,7 +62,7 @@ async fn delete_utterances() {
 
 #[tokio::test]
 async fn get_utterances_mock() {
-    let mut server = mockito::Server::new();
+    let mut server = mockito::Server::new_async().await;
 
     let url = server.url();
 
@@ -115,7 +115,7 @@ async fn get_utterances_mock() {
 
 #[tokio::test]
 async fn create_utterances_mock() {
-    let mut server = mockito::Server::new();
+    let mut server = mockito::Server::new_async().await;
 
     let url = server.url();
 
@@ -159,7 +159,7 @@ async fn create_utterances_mock() {
 
 #[tokio::test]
 async fn delete_utterances_mock() {
-    let mut server = mockito::Server::new();
+    let mut server = mockito::Server::new_async().await;
 
     let url = server.url();
 

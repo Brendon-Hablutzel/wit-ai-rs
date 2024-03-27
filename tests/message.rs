@@ -39,7 +39,7 @@ async fn message() {
 
 #[tokio::test]
 async fn message_mock() {
-    let mut server = mockito::Server::new();
+    let mut server = mockito::Server::new_async().await;
 
     let url = server.url();
 

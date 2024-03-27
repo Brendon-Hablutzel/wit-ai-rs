@@ -67,7 +67,7 @@ async fn delete_entity() {
 
 #[tokio::test]
 async fn get_all_entities_mock() {
-    let mut server = mockito::Server::new();
+    let mut server = mockito::Server::new_async().await;
 
     let url = server.url();
 
@@ -118,7 +118,7 @@ async fn get_all_entities_mock() {
 
 #[tokio::test]
 async fn create_entity_mock() {
-    let mut server = mockito::Server::new();
+    let mut server = mockito::Server::new_async().await;
 
     let url = server.url();
 
@@ -161,7 +161,7 @@ async fn create_entity_mock() {
 
 #[tokio::test]
 async fn get_one_entity_mock() {
-    let mut server = mockito::Server::new();
+    let mut server = mockito::Server::new_async().await;
 
     let url = server.url();
 
@@ -225,7 +225,7 @@ async fn get_one_entity_mock() {
 
 #[tokio::test]
 async fn update_entity_mock() {
-    let mut server = mockito::Server::new();
+    let mut server = mockito::Server::new_async().await;
 
     let url = server.url();
 
@@ -307,7 +307,7 @@ async fn update_entity_mock() {
 
 #[tokio::test]
 async fn delete_entity_mock() {
-    let mut server = mockito::Server::new();
+    let mut server = mockito::Server::new_async().await;
 
     let url = server.url();
 
