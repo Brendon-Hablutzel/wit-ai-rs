@@ -21,6 +21,7 @@ This crate currently supports the following endpoints:
 
 ### Audio
 - `POST /dictation` - takes an audio stream of speech and returns a transcription with text
+- `POST /speech` - takes an audio stream of speech and returns transcription as well as extracted meaning
 
 ### Entities
 - `GET /entities` - fetches all entities associated with the current app
