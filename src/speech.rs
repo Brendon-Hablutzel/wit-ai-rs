@@ -168,22 +168,18 @@ impl WitClient {
             let mut parse_chunk = |chunk: &[u8]| {
                 if let Ok(json_object) = serde_json::from_slice::<UnderstandingResponse>(chunk) {
                     speech_objs.push(Ok(SpeechResponse::Understanding(json_object)));
+                } else if let Ok(transcription) =
+                    serde_json::from_slice::<TranscriptionResponse>(chunk)
+                {
+                    speech_objs.push(Ok(SpeechResponse::Transcription(transcription)));
+                } else if let Ok(response_str) = from_utf8(chunk) {
+                    speech_objs.push(Err(Error::JSONParseError(format!(
+                        "{response_str} could not be parsed into JSON"
+                    ))));
                 } else {
-                    if let Ok(transcription) =
-                        serde_json::from_slice::<TranscriptionResponse>(chunk)
-                    {
-                        speech_objs.push(Ok(SpeechResponse::Transcription(transcription)));
-                    } else {
-                        if let Ok(response_str) = from_utf8(chunk) {
-                            speech_objs.push(Err(Error::JSONParseError(format!(
-                                "{response_str} could not be parsed into JSON"
-                            ))));
-                        } else {
-                            speech_objs.push(Err(Error::JSONParseError(
-                                "response could not be parsed into utf8".to_string(),
-                            )))
-                        }
-                    }
+                    speech_objs.push(Err(Error::JSONParseError(
+                        "response could not be parsed into utf8".to_string(),
+                    )))
                 }
             };
 
@@ -213,9 +209,3 @@ impl WitClient {
         Ok(speech)
     }
 }
-
-// curl -XPOST 'https://api.wit.ai/speech?v=20230215' \
-//     -i -L \
-//     -H "Authorization: Bearer OMIPXMA3DNSX33XNOAUT5AJTJFPULXM6" \
-//     -H "Content-Type: audio/mpeg" \
-//     --data-binary "@test1.mp3"
