@@ -97,3 +97,22 @@ impl DynamicEntities {
         serde_json::to_string(&self).expect("should be able to serialize DynamicEntities")
     }
 }
+
+/// The audio type
+pub enum AudioType {
+    /// MP3 (files ending in .mp3, for example)
+    MP3,
+    /// WAV (files ending in .wav, for example)
+    /// NOTE: this format is not streamable, which will slow down
+    /// dictation speed
+    WAV,
+}
+
+impl ToString for AudioType {
+    fn to_string(&self) -> String {
+        String::from(match self {
+            Self::MP3 => "audio/mpeg",
+            Self::WAV => "audio/wav",
+        })
+    }
+}

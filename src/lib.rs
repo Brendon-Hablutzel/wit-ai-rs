@@ -35,6 +35,7 @@ pub mod errors;
 pub mod intents;
 pub mod language;
 pub mod message;
+pub mod speech;
 pub mod traits;
 pub mod utterances;
 

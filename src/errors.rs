@@ -15,6 +15,8 @@ pub enum Error {
     WitError(ErrorResponse),
     /// An error parsing the url (base string + headers)
     URLParseError(url::ParseError),
+    /// An error that may occur while parsing JSON
+    JSONParseError(String),
 }
 
 impl From<reqwest::Error> for Error {
@@ -47,6 +49,7 @@ impl std::fmt::Display for Error {
             Self::InvalidArgument(details) => write!(f, "invalid argument: {}", details),
             Self::WitError(source) => write!(f, "error from wit.ai: {}", source),
             Self::URLParseError(source) => write!(f, "URL parse error: {}", source),
+            Self::JSONParseError(details) => write!(f, "JSON parse error: {}", details),
         }
     }
 }
@@ -59,6 +62,7 @@ impl std::error::Error for Error {
             Self::InvalidArgument(_) => None,
             Self::WitError(source) => Some(source),
             Self::URLParseError(source) => Some(source),
+            Self::JSONParseError(_) => None,
         }
     }
 }

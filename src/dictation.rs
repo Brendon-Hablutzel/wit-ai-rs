@@ -1,5 +1,6 @@
 //! Includes a method and types related to sending dictation requests to the wit api
 
+use crate::AudioType;
 use crate::{client::WitClient, errors::Error};
 use futures::{Stream, StreamExt};
 use reqwest::header::{CONTENT_TYPE, TRANSFER_ENCODING};
@@ -41,25 +42,6 @@ pub struct DictationResponse {
     pub is_final: Option<bool>,
 }
 
-/// The audio type
-pub enum AudioType {
-    /// MP3 (files ending in .mp3, for example)
-    MP3,
-    /// WAV (files ending in .wav, for example)
-    /// NOTE: this format is not streamable, which will slow down
-    /// dictation speed
-    WAV,
-}
-
-impl ToString for AudioType {
-    fn to_string(&self) -> String {
-        String::from(match self {
-            Self::MP3 => "audio/mpeg",
-            Self::WAV => "audio/wav",
-        })
-    }
-}
-
 impl WitClient {
     /// Sends a request to the dictation endpoint of wit, which takes in audio and returns
     /// a stream of partial transcriptions. Here, audio data is the audio data source
@@ -73,7 +55,8 @@ impl WitClient {
     /// # tokio_test::block_on(async {
     /// # use wit_ai_rs::client::WitClient;
     /// # use wit_ai_rs::errors::Error;
-    /// # use wit_ai_rs::dictation::{AudioType, DictationResponse};
+    /// # use wit_ai_rs::common_types::AudioType;
+    /// # use wit_ai_rs::dictation::DictationResponse;
     /// # use futures::StreamExt;
     /// # let wit_client = WitClient::new(String::new(), String::new());
     /// async fn process(res: Result<DictationResponse, Error>) {
