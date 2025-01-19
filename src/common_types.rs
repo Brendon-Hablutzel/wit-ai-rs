@@ -108,11 +108,12 @@ pub enum AudioType {
     WAV,
 }
 
-impl ToString for AudioType {
-    fn to_string(&self) -> String {
-        String::from(match self {
+impl std::fmt::Display for AudioType {
+    fn fmt(&self, f: &mut std::fmt::Formatter<'_>) -> std::fmt::Result {
+        let s = match self {
             Self::MP3 => "audio/mpeg",
             Self::WAV => "audio/wav",
-        })
+        };
+        write!(f, "{s}")
     }
 }
